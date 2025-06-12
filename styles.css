@@ -665,6 +665,12 @@ body {
   }
 }
 
+/* Mobile-specific visualization adjustments */
+.visualization-container {
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
 /* Responsive Design */
 @media (max-width: 1200px) {
   .sidebar {
@@ -727,6 +733,125 @@ body {
   }
   
   .brand-info p {
+    font-size: 0.75rem;
+  }
+  
+  /* Mobile visualization adjustments */
+  .visualization-wrapper {
+    min-height: 500px;
+  }
+  
+  /* Mobile contract nodes - smaller and better spaced */
+  .node-main {
+    font-size: 10px !important;
+  }
+  
+  .node-text {
+    font-size: 9px !important;
+  }
+  
+  .viz-header {
+    padding: var(--spacing-md);
+  }
+  
+  .viz-title h2 {
+    font-size: 1.25rem;
+  }
+  
+  .viz-title p {
+    font-size: 0.75rem;
+  }
+  
+  .viz-controls {
+    gap: var(--spacing-xs);
+  }
+  
+  .control-btn {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+  .header-content {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+  
+  .logo-section {
+    gap: var(--spacing-sm);
+  }
+  
+  .logo {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .logo img {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .brand-info h1 {
+    font-size: 1rem;
+  }
+  
+  .brand-info p {
+    font-size: 0.65rem;
+  }
+  
+  .view-btn {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: 0.75rem;
+  }
+  
+  .viz-header {
+    padding: var(--spacing-sm);
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    align-items: stretch;
+  }
+  
+  .viz-controls {
+    justify-content: center;
+  }
+  
+  .control-btn {
+    width: 32px;
+    height: 32px;
+  }
+  
+  /* Very compact footer for mobile */
+  .footer {
+    padding: var(--spacing-md);
+  }
+  
+  .footer-content {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    text-align: center;
+  }
+  
+  .footer-logo {
+    justify-content: center;
+  }
+  
+  .footer-logo img {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .footer-links {
+    gap: var(--spacing-md);
+    justify-content: center;
+  }
+  
+  .footer-link {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: 0.75rem;
+  }
+  
+  .copyright {
     font-size: 0.75rem;
   }
 }

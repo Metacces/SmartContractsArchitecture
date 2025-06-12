@@ -230,11 +230,35 @@ class ContractsVisualization {
 
   renderCustomHierarchy(data) {
     const categories = data.children;
-    const categoryWidth = (this.width - 200) / categories.length;
-    const startX = 100;
-    const rootY = 100;
-    const categoryY = 200;
-    const contractStartY = 300;
+    
+    // Mobile-responsive layout calculations
+    const isMobile = window.innerWidth <= 768;
+    const isSmallMobile = window.innerWidth <= 480;
+    
+    let categoryWidth, startX, rootY, categoryY, contractStartY;
+    
+    if (isSmallMobile) {
+      // Very compact layout for small screens
+      categoryWidth = Math.max((this.width - 40) / categories.length, 120);
+      startX = 20;
+      rootY = 60;
+      categoryY = 140;
+      contractStartY = 200;
+    } else if (isMobile) {
+      // Mobile layout
+      categoryWidth = Math.max((this.width - 60) / categories.length, 140);
+      startX = 30;
+      rootY = 80;
+      categoryY = 160;
+      contractStartY = 240;
+    } else {
+      // Desktop layout
+      categoryWidth = (this.width - 200) / categories.length;
+      startX = 100;
+      rootY = 100;
+      categoryY = 200;
+      contractStartY = 300;
+    }
     
     // Create nodes data with custom positioning
     const allNodes = [];
@@ -264,10 +288,13 @@ class ContractsVisualization {
       
       // Contract nodes in vertical column under each category
       category.children.forEach((contract, contractIndex) => {
+        // Mobile-responsive spacing
+        const contractSpacing = isSmallMobile ? 45 : isMobile ? 55 : 65;
+        
         const contractNode = {
           ...contract,
           x: categoryX,
-          y: contractStartY + (contractIndex * 65), // 65px spacing between contracts for better breathing room
+          y: contractStartY + (contractIndex * contractSpacing),
           depth: 2,
           parent: categoryNode
         };
@@ -565,24 +592,52 @@ class ContractsVisualization {
     nodeGroups.append('rect')
       .attr('class', 'node-main')
       .attr('width', d => {
-        if (d.depth === 0) return 160; // Root - wider
-        if (d.depth === 1) return 120; // Categories
-        return 110; // Contracts - uniform sizes
+        const isMobile = window.innerWidth <= 768;
+        const isSmallMobile = window.innerWidth <= 480;
+        
+        if (d.depth === 0) {
+          return isSmallMobile ? 140 : isMobile ? 150 : 160; // Root
+        }
+        if (d.depth === 1) {
+          return isSmallMobile ? 100 : isMobile ? 110 : 120; // Categories
+        }
+        return isSmallMobile ? 90 : isMobile ? 100 : 110; // Contracts
       })
       .attr('height', d => {
-        if (d.depth === 0) return 40; // Root - taller
-        if (d.depth === 1) return 32; // Categories
-        return 28; // Contracts - uniform height
+        const isMobile = window.innerWidth <= 768;
+        const isSmallMobile = window.innerWidth <= 480;
+        
+        if (d.depth === 0) {
+          return isSmallMobile ? 32 : isMobile ? 36 : 40; // Root
+        }
+        if (d.depth === 1) {
+          return isSmallMobile ? 26 : isMobile ? 29 : 32; // Categories
+        }
+        return isSmallMobile ? 22 : isMobile ? 25 : 28; // Contracts
       })
       .attr('x', d => {
-        if (d.depth === 0) return -80; // Center root
-        if (d.depth === 1) return -60; // Center categories
-        return -55; // Center contracts
+        const isMobile = window.innerWidth <= 768;
+        const isSmallMobile = window.innerWidth <= 480;
+        
+        if (d.depth === 0) {
+          return isSmallMobile ? -70 : isMobile ? -75 : -80; // Center root
+        }
+        if (d.depth === 1) {
+          return isSmallMobile ? -50 : isMobile ? -55 : -60; // Center categories
+        }
+        return isSmallMobile ? -45 : isMobile ? -50 : -55; // Center contracts
       })
       .attr('y', d => {
-        if (d.depth === 0) return -20; // Center root
-        if (d.depth === 1) return -16; // Center categories
-        return -14; // Center contracts
+        const isMobile = window.innerWidth <= 768;
+        const isSmallMobile = window.innerWidth <= 480;
+        
+        if (d.depth === 0) {
+          return isSmallMobile ? -16 : isMobile ? -18 : -20; // Center root
+        }
+        if (d.depth === 1) {
+          return isSmallMobile ? -13 : isMobile ? -14.5 : -16; // Center categories
+        }
+        return isSmallMobile ? -11 : isMobile ? -12.5 : -14; // Center contracts
       })
       .attr('rx', 10) // Rounded corners
       .attr('ry', 10)
@@ -644,9 +699,34 @@ class ContractsVisualization {
       .attr('dy', 4)
       .attr('text-anchor', 'middle')
       .attr('fill', '#ffffff')
-      .attr('font-size', d => d.depth === 0 ? '14px' : d.depth === 1 ? '11px' : '9px')
+      .attr('font-size', d => {
+        const isMobile = window.innerWidth <= 768;
+        const isSmallMobile = window.innerWidth <= 480;
+        
+        if (d.depth === 0) {
+          return isSmallMobile ? '11px' : isMobile ? '12px' : '14px';
+        }
+        if (d.depth === 1) {
+          return isSmallMobile ? '9px' : isMobile ? '10px' : '11px';
+        }
+        return isSmallMobile ? '7px' : isMobile ? '8px' : '9px';
+      })
       .attr('font-weight', d => d.depth < 2 ? '700' : '600')
-      .text(d => this.truncateText(d.name, d.depth === 0 ? 20 : d.depth === 1 ? 15 : 12))
+      .text(d => {
+        const isMobile = window.innerWidth <= 768;
+        const isSmallMobile = window.innerWidth <= 480;
+        
+        let maxLength;
+        if (d.depth === 0) {
+          maxLength = isSmallMobile ? 16 : isMobile ? 18 : 20;
+        } else if (d.depth === 1) {
+          maxLength = isSmallMobile ? 12 : isMobile ? 13 : 15;
+        } else {
+          maxLength = isSmallMobile ? 10 : isMobile ? 11 : 12;
+        }
+        
+        return this.truncateText(d.name, maxLength);
+      })
       .style('pointer-events', 'none')
       .style('text-shadow', '0 0 10px rgba(78, 205, 196, 0.5)');
 
