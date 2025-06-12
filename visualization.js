@@ -558,35 +558,7 @@ class ContractsVisualization {
       .on('mouseover', (event, d) => this.handleNodeHover(d, true))
       .on('mouseout', (event, d) => this.handleNodeHover(d, false));
 
-    // Add glassmorphism background for premium look
-    nodeGroups.append('rect')
-      .attr('class', 'node-bg')
-      .attr('width', d => {
-        if (d.depth === 0) return 164; // Root - wider with padding
-        if (d.depth === 1) return 124; // Categories
-        return 114; // Contracts - uniform sizes
-      })
-      .attr('height', d => {
-        if (d.depth === 0) return 44; // Root - taller with padding
-        if (d.depth === 1) return 36; // Categories
-        return 32; // Contracts - uniform height
-      })
-      .attr('x', d => {
-        if (d.depth === 0) return -82; // Center root
-        if (d.depth === 1) return -62; // Center categories
-        return -57; // Center contracts
-      })
-      .attr('y', d => {
-        if (d.depth === 0) return -22; // Center root
-        if (d.depth === 1) return -18; // Center categories
-        return -16; // Center contracts
-      })
-      .attr('rx', 12) // More rounded corners
-      .attr('ry', 12)
-      .attr('fill', 'rgba(255, 255, 255, 0.05)')
-      .attr('stroke', 'rgba(78, 205, 196, 0.2)')
-      .attr('stroke-width', 1)
-      .attr('filter', 'url(#glow)');
+    // Remove background rectangle to fix double button effect on mobile
     
     // Add main button with premium gradients
     nodeGroups.append('rect')
@@ -596,7 +568,7 @@ class ContractsVisualization {
         const isSmallMobile = window.innerWidth <= 480;
         
         if (d.depth === 0) {
-          return isSmallMobile ? 140 : isMobile ? 150 : 160; // Root
+          return isSmallMobile ? 160 : isMobile ? 170 : 160; // Root - wider for "Metacces Ecosystem"
         }
         if (d.depth === 1) {
           return isSmallMobile ? 100 : isMobile ? 110 : 120; // Categories
@@ -620,7 +592,7 @@ class ContractsVisualization {
         const isSmallMobile = window.innerWidth <= 480;
         
         if (d.depth === 0) {
-          return isSmallMobile ? -70 : isMobile ? -75 : -80; // Center root
+          return isSmallMobile ? -80 : isMobile ? -85 : -80; // Center root
         }
         if (d.depth === 1) {
           return isSmallMobile ? -50 : isMobile ? -55 : -60; // Center categories
@@ -658,7 +630,12 @@ class ContractsVisualization {
     nodeGroups.append('rect')
       .attr('class', 'node-highlight')
       .attr('width', d => {
-        if (d.depth === 0) return 156; // Slightly smaller
+        const isMobile = window.innerWidth <= 768;
+        const isSmallMobile = window.innerWidth <= 480;
+        
+        if (d.depth === 0) {
+          return isSmallMobile ? 156 : isMobile ? 166 : 156; // Match button width
+        }
         if (d.depth === 1) return 116;
         return 106;
       })
@@ -668,7 +645,12 @@ class ContractsVisualization {
         return 1;
       })
       .attr('x', d => {
-        if (d.depth === 0) return -78;
+        const isMobile = window.innerWidth <= 768;
+        const isSmallMobile = window.innerWidth <= 480;
+        
+        if (d.depth === 0) {
+          return isSmallMobile ? -78 : isMobile ? -83 : -78; // Match button position
+        }
         if (d.depth === 1) return -58;
         return -53;
       })
@@ -706,7 +688,8 @@ class ContractsVisualization {
         
         let maxLength;
         if (d.depth === 0) {
-          maxLength = isSmallMobile ? 16 : isMobile ? 18 : 20;
+          // Don't truncate "Metacces Ecosystem" on mobile
+          maxLength = isSmallMobile ? 25 : isMobile ? 25 : 20;
         } else if (d.depth === 1) {
           maxLength = isSmallMobile ? 12 : isMobile ? 13 : 15;
         } else {
@@ -743,7 +726,8 @@ class ContractsVisualization {
         
         let maxLength;
         if (d.depth === 0) {
-          maxLength = isSmallMobile ? 16 : isMobile ? 18 : 20;
+          // Don't truncate "Metacces Ecosystem" on mobile
+          maxLength = isSmallMobile ? 25 : isMobile ? 25 : 20;
         } else if (d.depth === 1) {
           maxLength = isSmallMobile ? 12 : isMobile ? 13 : 15;
         } else {
