@@ -22,6 +22,33 @@ class MetaccesApp {
   }
   
   setupEventListeners() {
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const sidebar = document.querySelector('.sidebar');
+    
+    if (mobileMenuBtn && sidebar) {
+      mobileMenuBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('open');
+      });
+      
+      // Close sidebar when clicking outside on mobile
+      document.addEventListener('click', (e) => {
+        if (window.innerWidth <= 768 && 
+            sidebar.classList.contains('open') && 
+            !sidebar.contains(e.target) && 
+            !mobileMenuBtn.contains(e.target)) {
+          sidebar.classList.remove('open');
+        }
+      });
+      
+      // Close sidebar on window resize to desktop
+      window.addEventListener('resize', () => {
+        if (window.innerWidth > 768) {
+          sidebar.classList.remove('open');
+        }
+      });
+    }
+    
     // View controls
     document.querySelectorAll('.view-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
