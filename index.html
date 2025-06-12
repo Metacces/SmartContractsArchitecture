@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metacces Smart Contracts Architecture</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://unpkg.com/d3-force@3"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo">
+                        <img src="./logo.png" alt="Metacces Logo" width="40" height="40" />
+                    </div>
+                    <div class="brand-info">
+                        <h1>Metacces Architecture</h1>
+                        <p>Smart Contracts Visualization Dashboard</p>
+                    </div>
+                </div>
+                
+                <div class="header-controls">
+                    <div class="search-container">
+                        <input type="text" id="searchInput" placeholder="Search contracts, functions..." />
+                        <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                    </div>
+                    
+                    <div class="view-controls">
+                        <button class="view-btn active" data-view="hierarchy">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                            Hierarchy
+                        </button>
+                        <button class="view-btn" data-view="network">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <circle cx="12" cy="12" r="3"></circle>
+                                <circle cx="12" cy="1" r="1"></circle>
+                                <circle cx="12" cy="23" r="1"></circle>
+                                <circle cx="1" cy="12" r="1"></circle>
+                                <circle cx="23" cy="12" r="1"></circle>
+                                <line x1="12" y1="15" x2="12" y2="22"></line>
+                                <line x1="12" y1="2" x2="12" y2="9"></line>
+                                <line x1="9" y1="12" x2="2" y2="12"></line>
+                                <line x1="15" y1="12" x2="22" y2="12"></line>
+                            </svg>
+                            Network
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-section">
+                    <h3>System Overview</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="totalContracts">--</div>
+                            <div class="stat-label">Total Contracts</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="totalFunctions">--</div>
+                            <div class="stat-label">Functions</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="totalInterfaces">--</div>
+                            <div class="stat-label">Interfaces</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="totalConnections">--</div>
+                            <div class="stat-label">Connections</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>Contract Categories</h3>
+                    <div class="category-filters">
+                        <div class="filter-item active" data-category="all">
+                            <div class="filter-color all"></div>
+                            <span>All Systems</span>
+                            <span class="count" id="count-all">--</span>
+                        </div>
+                        <div class="filter-item" data-category="admin">
+                            <div class="filter-color admin"></div>
+                            <span>Admin & Core</span>
+                            <span class="count" id="count-admin">--</span>
+                        </div>
+                        <div class="filter-item" data-category="skins">
+                            <div class="filter-color skins"></div>
+                            <span>OLI Skins</span>
+                            <span class="count" id="count-skins">--</span>
+                        </div>
+                        <div class="filter-item" data-category="user">
+                            <div class="filter-color user"></div>
+                            <span>User Account</span>
+                            <span class="count" id="count-user">--</span>
+                        </div>
+                        <div class="filter-item" data-category="tokens">
+                            <div class="filter-color tokens"></div>
+                            <span>Token Systems</span>
+                            <span class="count" id="count-tokens">--</span>
+                        </div>
+                        <div class="filter-item" data-category="social">
+                            <div class="filter-color social"></div>
+                            <span>Social Systems</span>
+                            <span class="count" id="count-social">--</span>
+                        </div>
+                        <div class="filter-item" data-category="utils">
+                            <div class="filter-color utils"></div>
+                            <span>Utilities</span>
+                            <span class="count" id="count-utils">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>Legend</h3>
+                    <div class="legend">
+                        <div class="legend-item">
+                            <div class="legend-symbol main-contract"></div>
+                            <span>Main Contract</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-symbol interface"></div>
+                            <span>Interface</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-symbol library"></div>
+                            <span>Library</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-symbol dependency"></div>
+                            <span>Dependency</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Visualization Area -->
+            <section class="visualization-container">
+                <div class="viz-header">
+                    <div class="viz-title">
+                        <h2 id="currentViewTitle">Contract Hierarchy Overview</h2>
+                        <p id="currentViewDescription">Interactive visualization of the Metacces smart contracts ecosystem</p>
+                    </div>
+                    
+                    <div class="viz-controls">
+                        <button class="control-btn" id="zoomIn" title="Zoom In">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="M21 21l-4.35-4.35M11 8v6M8 11h6"></path>
+                            </svg>
+                        </button>
+                        <button class="control-btn" id="zoomOut" title="Zoom Out">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="M21 21l-4.35-4.35M8 11h6"></path>
+                            </svg>
+                        </button>
+                        <button class="control-btn" id="resetView" title="Reset View">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                                <path d="M3 3v5h5"></path>
+                            </svg>
+                        </button>
+                        <button class="control-btn" id="restartLayout" title="Restart Layout">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                                <path d="M3 3v5h5"></path>
+                                <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path>
+                                <path d="M21 3v5h-5"></path>
+                            </svg>
+                        </button>
+                        <button class="control-btn" id="fullscreen" title="Toggle Fullscreen">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="visualization-wrapper">
+                    <svg id="mainVisualization"></svg>
+                    <div class="loading-overlay" id="loadingOverlay">
+                        <div class="loading-spinner"></div>
+                        <p>Loading contract data...</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Contract Details Panel -->
+        <div class="details-panel" id="detailsPanel">
+            <div class="details-header">
+                <h3 id="detailsTitle">Contract Details</h3>
+                <button class="close-btn" id="closeDetails">×</button>
+            </div>
+            <div class="details-content" id="detailsContent">
+                <p>Select a contract to view its details and function relationships</p>
+            </div>
+        </div>
+
+        <!-- Toast Notifications -->
+        <div class="toast-container" id="toastContainer"></div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="visualization.js"></script>
+    <script src="app.js"></script>
+</body>
+</html> 
