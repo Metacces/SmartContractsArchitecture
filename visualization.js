@@ -687,9 +687,34 @@ class ContractsVisualization {
       .attr('dy', 4)
       .attr('text-anchor', 'middle')
       .attr('fill', 'rgba(0, 0, 0, 0.3)')
-      .attr('font-size', d => d.depth === 0 ? '14px' : d.depth === 1 ? '11px' : '9px')
+      .attr('font-size', d => {
+        const isMobile = window.innerWidth <= 768;
+        const isSmallMobile = window.innerWidth <= 480;
+        
+        if (d.depth === 0) {
+          return isSmallMobile ? '11px' : isMobile ? '12px' : '14px';
+        }
+        if (d.depth === 1) {
+          return isSmallMobile ? '9px' : isMobile ? '10px' : '11px';
+        }
+        return isSmallMobile ? '7px' : isMobile ? '8px' : '9px';
+      })
       .attr('font-weight', d => d.depth < 2 ? '700' : '600')
-      .text(d => this.truncateText(d.name, d.depth === 0 ? 20 : d.depth === 1 ? 15 : 12))
+      .text(d => {
+        const isMobile = window.innerWidth <= 768;
+        const isSmallMobile = window.innerWidth <= 480;
+        
+        let maxLength;
+        if (d.depth === 0) {
+          maxLength = isSmallMobile ? 16 : isMobile ? 18 : 20;
+        } else if (d.depth === 1) {
+          maxLength = isSmallMobile ? 12 : isMobile ? 13 : 15;
+        } else {
+          maxLength = isSmallMobile ? 10 : isMobile ? 11 : 12;
+        }
+        
+        return this.truncateText(d.name, maxLength);
+      })
       .style('pointer-events', 'none')
       .attr('transform', 'translate(1, 1)'); // Shadow offset
 
