@@ -663,43 +663,7 @@ class ContractsVisualization {
       .attr('fill', 'rgba(255, 255, 255, 0.4)')
       .attr('opacity', 0.8);
 
-    // Add premium text with shadow
-    nodeGroups.append('text')
-      .attr('class', 'node-text-shadow')
-      .attr('dy', 4)
-      .attr('text-anchor', 'middle')
-      .attr('fill', 'rgba(0, 0, 0, 0.3)')
-      .attr('font-size', d => {
-        const isMobile = window.innerWidth <= 768;
-        const isSmallMobile = window.innerWidth <= 480;
-        
-        if (d.depth === 0) {
-          return isSmallMobile ? '11px' : isMobile ? '12px' : '14px';
-        }
-        if (d.depth === 1) {
-          return isSmallMobile ? '9px' : isMobile ? '10px' : '11px';
-        }
-        return isSmallMobile ? '7px' : isMobile ? '8px' : '9px';
-      })
-      .attr('font-weight', d => d.depth < 2 ? '700' : '600')
-      .text(d => {
-        const isMobile = window.innerWidth <= 768;
-        const isSmallMobile = window.innerWidth <= 480;
-        
-        let maxLength;
-        if (d.depth === 0) {
-          // Don't truncate "Metacces Ecosystem" on mobile
-          maxLength = isSmallMobile ? 25 : isMobile ? 25 : 20;
-        } else if (d.depth === 1) {
-          maxLength = isSmallMobile ? 12 : isMobile ? 13 : 15;
-        } else {
-          maxLength = isSmallMobile ? 10 : isMobile ? 11 : 12;
-        }
-        
-        return this.truncateText(d.name, maxLength);
-      })
-      .style('pointer-events', 'none')
-      .attr('transform', 'translate(1, 1)'); // Shadow offset
+    // Remove shadow text to eliminate duplicate text effect
 
     // Add main text
     nodeGroups.append('text')
@@ -737,7 +701,7 @@ class ContractsVisualization {
         return this.truncateText(d.name, maxLength);
       })
       .style('pointer-events', 'none')
-      .style('text-shadow', '0 0 10px rgba(78, 205, 196, 0.5)');
+      .style('text-shadow', '0 1px 2px rgba(0, 0, 0, 0.8), 0 0 8px rgba(78, 205, 196, 0.3)');
 
     // Add subtle entrance animation
     nodeGroups
