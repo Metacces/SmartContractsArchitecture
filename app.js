@@ -27,17 +27,27 @@ class MetaccesApp {
     const sidebar = document.querySelector('.sidebar');
     
     if (mobileMenuBtn && sidebar) {
-      mobileMenuBtn.addEventListener('click', () => {
+      // Toggle menu when clicking the button
+      mobileMenuBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
         sidebar.classList.toggle('open');
       });
       
-      // Close sidebar when clicking outside on mobile
-      document.addEventListener('click', (e) => {
-        if (window.innerWidth <= 768 && 
-            sidebar.classList.contains('open') && 
-            !sidebar.contains(e.target) && 
-            !mobileMenuBtn.contains(e.target)) {
+      // Close button functionality
+      const mobileCloseBtn = document.getElementById('mobileCloseBtn');
+      if (mobileCloseBtn) {
+        mobileCloseBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
           sidebar.classList.remove('open');
+        });
+      }
+      
+      // Close sidebar when clicking on sidebar items (for mobile UX)
+      sidebar.addEventListener('click', (e) => {
+        if (e.target.closest('.filter-item') || e.target.closest('.view-btn')) {
+          if (window.innerWidth <= 768) {
+            sidebar.classList.remove('open');
+          }
         }
       });
       
@@ -108,13 +118,24 @@ class MetaccesApp {
       this.handleResize();
     });
     
-    // Click outside details panel to close
+    // Click outside handlers
     document.addEventListener('click', (e) => {
+      // Handle details panel
       const detailsPanel = document.getElementById('detailsPanel');
       if (detailsPanel.classList.contains('open') && 
           !detailsPanel.contains(e.target) && 
           !e.target.closest('.contract-node, .hierarchy-node, .network-node')) {
         this.closeDetailsPanel();
+      }
+      
+      // Handle mobile sidebar
+      const sidebar = document.querySelector('.sidebar');
+      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      if (window.innerWidth <= 768 && 
+          sidebar && sidebar.classList.contains('open') && 
+          !sidebar.contains(e.target) && 
+          !mobileMenuBtn.contains(e.target)) {
+        sidebar.classList.remove('open');
       }
     });
   }
@@ -150,6 +171,11 @@ class MetaccesApp {
           break;
         case 'Escape':
           this.closeDetailsPanel();
+          // Also close mobile sidebar if open
+          const sidebar = document.querySelector('.sidebar');
+          if (sidebar && sidebar.classList.contains('open')) {
+            sidebar.classList.remove('open');
+          }
           break;
         case '/':
           e.preventDefault();

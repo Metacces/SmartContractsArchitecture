@@ -247,6 +247,35 @@ body {
   transform: scale(0.95);
 }
 
+/* Mobile Close Button */
+.mobile-close-btn {
+  display: none;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 36px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  z-index: 1001;
+  align-items: center;
+  justify-content: center;
+  touch-action: manipulation;
+}
+
+.mobile-close-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.mobile-close-btn:active {
+  transform: scale(0.95);
+}
+
 /* Main Content */
 .main-content {
   display: flex;
@@ -760,6 +789,10 @@ body {
   .mobile-menu-btn {
     display: flex;
     order: -1;
+  }
+  
+  .mobile-close-btn {
+    display: flex;
   }
   
   .search-container {
